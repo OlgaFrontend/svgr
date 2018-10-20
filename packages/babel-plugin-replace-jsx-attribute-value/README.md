@@ -1,18 +1,23 @@
-# babel-plugin-remove-jsx-attribute
+# @svgr/babel-plugin-replace-jsx-attribute-value
 
 ## Install
 
 ```
-npm install --save-dev babel-plugin-remove-jsx-attribute
+npm install --save-dev @svgr/babel-plugin-replace-jsx-attribute-value
 ```
 
 ## Usage
 
 **.babelrc**
 
-```
+```json
 {
-  "plugins": [["babel-plugin-remove-jsx-attribute", { attribute: "xmlns" }]]
+  "plugins": [
+    [
+      "@svgr/babel-plugin-replace-jsx-attribute-value",
+      { "values": { "#000": "currentColor" } }
+    ]
+  ]
 }
 ```
 

@@ -3,9 +3,7 @@ import all from './all'
 import getAttributes from './getAttributes'
 import { ELEMENT_TAG_NAME_MAPPING } from './mappings'
 
-export const root = (h, node) => {
-  return t.program(all(h, node))
-}
+export const root = (h, node) => t.program(all(h, node))
 
 export const comment = (h, node, parent) => {
   if (parent.type === 'root') {
@@ -14,9 +12,7 @@ export const comment = (h, node, parent) => {
 
   const expression = t.jsxEmptyExpression()
   t.addComment(expression, 'inner', node.value)
-  // Waiting for types to be fixed
-  // t.jsxExpressionContainer(expression)
-  return { type: 'JSXExpressionContainer', expression }
+  return t.jsxExpressionContainer(expression)
 }
 
 export const text = (h, node, parent) => {
@@ -24,7 +20,11 @@ export const text = (h, node, parent) => {
     return null
   }
 
-  return t.jsxText(node.value)
+  if (node.value.match(/^\s+$/)) {
+    return null
+  }
+
+  return t.jsxExpressionContainer(t.stringLiteral(node.value))
 }
 
 export const element = (h, node, parent) => {

@@ -1,13 +1,22 @@
-const removeJSXAttribute = () => ({
+const removeJSXAttribute = (api, opts) => ({
   visitor: {
-    JSXAttribute(path, state) {
-      const { attribute, element } = state.opts
-      if (element && path.parent.name.name !== element) return
-      if (Array.isArray(attribute) && !attribute.includes(path.node.name.name))
+    JSXAttribute(path) {
+      if (
+        opts.elements &&
+        !opts.elements.some(
+          element =>
+            !path.parentPath.get('name').isJSXIdentifier({ name: element }),
+        )
+      )
         return
-      if (path.node.name.name !== attribute) return
 
-      path.remove()
+      opts.attributes.some(({ name }) => {
+        if (Array.isArray(name) && !name.includes(path.node.name.name))
+          return false
+        if (!path.get('name').isJSXIdentifier({ name })) return false
+        path.remove()
+        return true
+      })
     },
   },
 })

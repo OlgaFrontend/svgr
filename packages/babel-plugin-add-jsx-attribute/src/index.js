@@ -3,18 +3,18 @@ const positionMethod = {
   end: 'pushContainer',
 }
 
-const addJSXAttribute = ({ types: t }) => {
+const addJSXAttribute = ({ types: t }, opts) => {
   function getAttributeValue({ literal, value }) {
-    if (literal) {
-      return t.jsxExpressionContainer(t.identifier(value))
-    }
-
     if (typeof value === 'boolean') {
       return t.jsxExpressionContainer(t.booleanLiteral(value))
     }
 
     if (typeof value === 'number') {
       return t.jsxExpressionContainer(t.numericLiteral(value))
+    }
+
+    if (typeof value === 'string' && literal) {
+      return t.jsxExpressionContainer(t.identifier(value))
     }
 
     if (typeof value === 'string') {
@@ -37,33 +37,46 @@ const addJSXAttribute = ({ types: t }) => {
 
   return {
     visitor: {
-      JSXOpeningElement(path, state) {
-        const {
-          element,
-          name,
-          value = null,
-          spread = false,
-          literal = false,
-          position = 'start',
-        } = state.opts
+      JSXOpeningElement(path) {
+        if (
+          opts.elements &&
+          !opts.elements.some(element =>
+            path.get('name').isJSXIdentifier({ name: element }),
+          )
+        )
+          return
 
-        if (path.node.name.name !== element) return
+        opts.attributes.forEach(
+          ({
+            name,
+            value = null,
+            spread = false,
+            literal = false,
+            position = 'end',
+          }) => {
+            const method = positionMethod[position]
+            const newAttribute = getAttribute({ spread, name, value, literal })
+            const attributes = path.get('attributes')
 
-        const method = positionMethod[position]
-        const newAttribute = getAttribute({ spread, name, value, literal })
-        const attributes = path.get('attributes')
+            const isEqualAttribute = attribute => {
+              if (spread) {
+                return attribute.get('argument').isIdentifier({ name })
+              }
 
-        const isEqualAttribute = attribute => {
-          if (spread) {
-            return attribute.get('argument').isIdentifier({ name })
-          }
+              return attribute.get('name').isJSXIdentifier({ name })
+            }
 
-          return attribute.get('name').isJSXIdentifier({ name })
-        }
+            const replaced = attributes.some(attribute => {
+              if (!isEqualAttribute(attribute)) return false
+              attribute.replaceWith(newAttribute)
+              return true
+            })
 
-        if (attributes.some(isEqualAttribute)) return
-
-        path[method]('attributes', newAttribute)
+            if (!replaced) {
+              path[method]('attributes', newAttribute)
+            }
+          },
+        )
       },
     },
   }

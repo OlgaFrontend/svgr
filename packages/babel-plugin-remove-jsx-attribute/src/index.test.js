@@ -11,18 +11,31 @@ const testPlugin = (code, options) => {
 
 describe('plugin', () => {
   it('should remove attribute', () => {
-    expect(testPlugin('<div foo bar />', { attribute: 'foo' }))
+    expect(testPlugin('<div foo bar />', { attributes: [{ name: 'foo' }] }))
       .toMatchInlineSnapshot(`
 "\\"use strict\\";
 
 <div bar />;"
 `)
 
-    expect(testPlugin('<div foo bar />', { attribute: 'bar' }))
+    expect(testPlugin('<div foo bar />', { attributes: [{ name: 'bar' }] }))
       .toMatchInlineSnapshot(`
 "\\"use strict\\";
 
 <div foo />;"
+`)
+  })
+
+  it('should be possible to target an element', () => {
+    expect(
+      testPlugin('<div foo><span foo /></div>', {
+        elements: ['span'],
+        attributes: [{ name: 'foo' }],
+      }),
+    ).toMatchInlineSnapshot(`
+"\\"use strict\\";
+
+<div><span foo /></div>;"
 `)
   })
 })

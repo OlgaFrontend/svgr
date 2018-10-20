@@ -4,10 +4,11 @@ import stringToObjectStyle from './stringToObjectStyle'
 import { ATTRIBUTE_MAPPING, ELEMENT_ATTRIBUTE_MAPPING } from './mappings'
 
 function getKey(key, value, node) {
+  const lowerCaseKey = key.toLowerCase()
   const mappedElementAttribute =
     ELEMENT_ATTRIBUTE_MAPPING[node.name] &&
-    ELEMENT_ATTRIBUTE_MAPPING[node.name][key]
-  const mappedAttribute = ATTRIBUTE_MAPPING[key]
+    ELEMENT_ATTRIBUTE_MAPPING[node.name][lowerCaseKey]
+  const mappedAttribute = ATTRIBUTE_MAPPING[lowerCaseKey]
   return t.jsxIdentifier(mappedElementAttribute || mappedAttribute || key)
 }
 

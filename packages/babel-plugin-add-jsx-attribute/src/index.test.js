@@ -13,8 +13,7 @@ describe('plugin', () => {
   it('should add simple attribute', () => {
     expect(
       testPlugin('<div />', {
-        element: 'div',
-        name: 'disabled',
+        attributes: [{ name: 'disabled' }],
       }),
     ).toMatchInlineSnapshot(`
 "\\"use strict\\";
@@ -26,9 +25,7 @@ describe('plugin', () => {
   it('should add attribute with value', () => {
     expect(
       testPlugin('<div />', {
-        element: 'div',
-        name: 'disabled',
-        value: true,
+        attributes: [{ name: 'disabled', value: true }],
       }),
     ).toMatchInlineSnapshot(`
 "\\"use strict\\";
@@ -37,9 +34,7 @@ describe('plugin', () => {
 `)
     expect(
       testPlugin('<div />', {
-        element: 'div',
-        name: 'disabled',
-        value: 'true',
+        attributes: [{ name: 'disabled', value: 'true' }],
       }),
     ).toMatchInlineSnapshot(`
 "\\"use strict\\";
@@ -49,9 +44,7 @@ describe('plugin', () => {
 
     expect(
       testPlugin('<div />', {
-        element: 'div',
-        name: 'disabled',
-        value: 200,
+        attributes: [{ name: 'disabled', value: 200 }],
       }),
     ).toMatchInlineSnapshot(`
 "\\"use strict\\";
@@ -63,10 +56,7 @@ describe('plugin', () => {
   it('should add literal attribute', () => {
     expect(
       testPlugin('<div />', {
-        element: 'div',
-        name: 'ref',
-        value: 'ref',
-        literal: true,
+        attributes: [{ name: 'ref', value: 'ref', literal: true }],
       }),
     ).toMatchInlineSnapshot(`
 "\\"use strict\\";
@@ -77,29 +67,49 @@ describe('plugin', () => {
 
   it('should add spread attribute', () => {
     expect(
-      testPlugin('<div><span /></div>', {
-        element: 'div',
-        spread: true,
-        name: 'props',
-        position: 'start',
+      testPlugin('<div foo><span /></div>', {
+        elements: ['div'],
+        attributes: [
+          {
+            spread: true,
+            name: 'props',
+            position: 'start',
+          },
+        ],
       }),
     ).toMatchInlineSnapshot(`
 "\\"use strict\\";
 
-<div {...props}><span /></div>;"
+<div {...props} foo><span /></div>;"
 `)
 
     expect(
       testPlugin('<div><span foo="bar" /></div>', {
-        element: 'span',
-        spread: true,
-        name: 'props',
-        position: 'end',
+        elements: ['span'],
+        attributes: [
+          {
+            spread: true,
+            name: 'props',
+            position: 'end',
+          },
+        ],
       }),
     ).toMatchInlineSnapshot(`
 "\\"use strict\\";
 
 <div><span foo=\\"bar\\" {...props} /></div>;"
+`)
+  })
+
+  it('should replace attribute', () => {
+    expect(
+      testPlugin('<div disabled />', {
+        attributes: [{ name: 'disabled', value: false }],
+      }),
+    ).toMatchInlineSnapshot(`
+"\\"use strict\\";
+
+<div disabled={false} />;"
 `)
   })
 })

@@ -23,7 +23,7 @@ const elementToComponent = {
   image: 'Image',
 }
 
-const transformReactNativeSVG = ({ types: t }) => ({
+const plugin = ({ types: t }) => ({
   visitor: {
     JSXElement(path, state) {
       const { metadata } = state.file
@@ -35,8 +35,10 @@ const transformReactNativeSVG = ({ types: t }) => ({
       if (component) {
         const openingElementName = path.get('openingElement.name')
         openingElementName.replaceWith(t.jsxIdentifier(component))
-        const closingElementName = path.get('closingElement.name')
-        closingElementName.replaceWith(t.jsxIdentifier(component))
+        if (path.has('closingElement')) {
+          const closingElementName = path.get('closingElement.name')
+          closingElementName.replaceWith(t.jsxIdentifier(component))
+        }
         metadata.reactNativeSvgReplacedComponents =
           metadata.reactNativeSvgReplacedComponents || new Set()
         metadata.reactNativeSvgReplacedComponents.add(component)
@@ -52,4 +54,4 @@ const transformReactNativeSVG = ({ types: t }) => ({
   },
 })
 
-export default transformReactNativeSVG
+export default plugin

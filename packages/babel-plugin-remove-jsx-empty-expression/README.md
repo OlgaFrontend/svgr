@@ -1,18 +1,18 @@
-# babel-plugin-remove-jsx-attribute
+# @svgr/babel-plugin-remove-jsx-empty-expression
 
 ## Install
 
 ```
-npm install --save-dev babel-plugin-remove-jsx-attribute
+npm install --save-dev @svgr/babel-plugin-remove-jsx-empty-expression
 ```
 
 ## Usage
 
 **.babelrc**
 
-```
+```json
 {
-  "plugins": [["babel-plugin-remove-jsx-attribute", { attribute: "xmlns" }]]
+  "plugins": ["@svgr/babel-plugin-remove-jsx-empty-expression"]
 }
 ```
 

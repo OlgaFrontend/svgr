@@ -1,18 +1,26 @@
-# babel-plugin-remove-jsx-attribute
+# @svgr/babel-plugin-remove-jsx-attribute
 
 ## Install
 
 ```
-npm install --save-dev babel-plugin-remove-jsx-attribute
+npm install --save-dev @svgr/babel-plugin-remove-jsx-attribute
 ```
 
 ## Usage
 
 **.babelrc**
 
-```
+```json
 {
-  "plugins": [["babel-plugin-remove-jsx-attribute", { attribute: "xmlns" }]]
+  "plugins": [
+    [
+      "@svgr/babel-plugin-remove-jsx-attribute",
+      {
+        "elements": ["svg"],
+        "attributes": [{ "name": "width" }, { "name": "height" }]
+      }
+    ]
+  ]
 }
 ```
 

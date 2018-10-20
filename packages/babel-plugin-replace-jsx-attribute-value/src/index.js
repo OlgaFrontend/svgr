@@ -1,16 +1,15 @@
-const replaceJSXAttribute = ({ types: t }) => ({
+const plugin = ({ types: t }, opts) => ({
   visitor: {
-    JSXAttribute(path, state) {
+    JSXAttribute(path) {
       const value = path.get('value')
       if (!value.isStringLiteral()) return
-      const { values } = state.opts
-      Object.keys(values).forEach(key => {
-        if (value.node.value === key) {
-          path.get('value').replaceWith(t.stringLiteral(values[key]))
-        }
+
+      Object.keys(opts.values).forEach(key => {
+        if (!value.isStringLiteral({ value: key })) return
+        value.replaceWith(t.stringLiteral(opts.values[key]))
       })
     },
   },
 })
 
-export default replaceJSXAttribute
+export default plugin

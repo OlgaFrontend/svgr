@@ -1,9 +1,8 @@
 const removeJSXEmptyExpression = () => ({
   visitor: {
     JSXExpressionContainer(path) {
-      if (path.node.expression.type === 'JSXEmptyExpression') {
-        path.remove()
-      }
+      if (!path.get('expression').isJSXEmptyExpression()) return
+      path.remove()
     },
   },
 })

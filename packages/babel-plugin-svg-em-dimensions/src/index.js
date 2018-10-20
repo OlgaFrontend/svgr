@@ -1,25 +1,31 @@
-const requiredAttributes = ['width', 'height']
-const attributeValue = '1em'
+const elements = ['svg', 'Svg']
 
-const svgIcon = ({ types: t }) => ({
+const plugin = ({ types: t }) => ({
   visitor: {
     JSXOpeningElement: {
       enter(path) {
-        if (path.node.name.name !== 'svg') return
-        const addedAttributes = []
-        path.traverse({
-          JSXAttribute(attributePath) {
-            const { name } = attributePath.node.name
-            if (requiredAttributes.includes(name)) {
-              const value = attributePath.get('value')
-              value.replaceWith(t.stringLiteral(attributeValue))
-              addedAttributes.push(name)
-            }
-          },
+        if (
+          !elements.some(element =>
+            path.get('name').isJSXIdentifier({ name: element }),
+          )
+        )
+          return
+
+        const requiredAttributes = ['width', 'height']
+        const attributeValue = '1em'
+
+        path.get('attributes').forEach(attributePath => {
+          if (!attributePath.isJSXAttribute()) return
+          const index = requiredAttributes.indexOf(attributePath.node.name.name)
+
+          if (index === -1) return
+
+          const value = attributePath.get('value')
+          value.replaceWith(t.stringLiteral(attributeValue))
+          requiredAttributes.splice(index, 1)
         })
 
         requiredAttributes.forEach(attribute => {
-          if (addedAttributes.includes(attribute)) return
           path.pushContainer(
             'attributes',
             t.jsxAttribute(
@@ -33,4 +39,4 @@ const svgIcon = ({ types: t }) => ({
   },
 })
 
-export default svgIcon
+export default plugin
