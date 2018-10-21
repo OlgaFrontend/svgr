@@ -51,6 +51,7 @@ const plugin = (api, opts) => {
   }
 
   const plugins = [
+    ['@svgr/babel-plugin-transform-svg-component', opts],
     [
       '@svgr/babel-plugin-remove-jsx-attribute',
       { elements: ['svg', 'Svg'], attributes: toRemoveAttributes },
@@ -80,8 +81,6 @@ const plugin = (api, opts) => {
   if (opts.native) {
     plugins.push('@svgr/babel-plugin-transform-react-native-svg')
   }
-
-  plugins.push(['@svgr/babel-plugin-transform-svg-component', opts])
 
   return { plugins }
 }

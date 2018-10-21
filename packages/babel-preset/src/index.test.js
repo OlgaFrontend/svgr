@@ -5,6 +5,7 @@ const testPreset = (code, options) => {
   const result = transform(code, {
     plugins: ['@babel/plugin-syntax-jsx'],
     presets: [[preset, options]],
+    configFile: false,
   })
 
   return result.code
@@ -18,11 +19,16 @@ describe('preset', () => {
           foo: 'bar',
           x: '{y}',
         },
+        state: {
+          componentName: 'SvgComponent',
+        },
       }),
     ).toMatchInlineSnapshot(`
-"\\"use strict\\";
+"import React from \\"react\\";
 
-<svg foo=\\"a\\" x={y} />;"
+const SvgComponent = () => <svg foo=\\"a\\" x={y} />;
+
+export default SvgComponent;"
 `)
   })
 
@@ -30,11 +36,18 @@ describe('preset', () => {
     expect(
       testPreset('<svg></svg>', {
         titleProp: true,
+        state: {
+          componentName: 'SvgComponent',
+        },
       }),
     ).toMatchInlineSnapshot(`
-"\\"use strict\\";
+"import React from \\"react\\";
 
-<svg><title>{title}</title></svg>;"
+const SvgComponent = ({
+  title
+}) => <svg><title>{title}</title></svg>;
+
+export default SvgComponent;"
 `)
   })
 })

@@ -4,6 +4,7 @@ import plugin from '.'
 const testPlugin = (code, options) => {
   const result = transform(code, {
     plugins: ['@babel/plugin-syntax-jsx', [plugin, options]],
+    configFile: false,
   })
 
   return result.code
@@ -15,11 +16,7 @@ describe('plugin', () => {
       testPlugin('<div />', {
         attributes: [{ name: 'disabled' }],
       }),
-    ).toMatchInlineSnapshot(`
-"\\"use strict\\";
-
-<div disabled />;"
-`)
+    ).toMatchInlineSnapshot(`"<div disabled />;"`)
   })
 
   it('should add attribute with value', () => {
@@ -27,30 +24,18 @@ describe('plugin', () => {
       testPlugin('<div />', {
         attributes: [{ name: 'disabled', value: true }],
       }),
-    ).toMatchInlineSnapshot(`
-"\\"use strict\\";
-
-<div disabled={true} />;"
-`)
+    ).toMatchInlineSnapshot(`"<div disabled={true} />;"`)
     expect(
       testPlugin('<div />', {
         attributes: [{ name: 'disabled', value: 'true' }],
       }),
-    ).toMatchInlineSnapshot(`
-"\\"use strict\\";
-
-<div disabled=\\"true\\" />;"
-`)
+    ).toMatchInlineSnapshot(`"<div disabled=\\"true\\" />;"`)
 
     expect(
       testPlugin('<div />', {
         attributes: [{ name: 'disabled', value: 200 }],
       }),
-    ).toMatchInlineSnapshot(`
-"\\"use strict\\";
-
-<div disabled={200} />;"
-`)
+    ).toMatchInlineSnapshot(`"<div disabled={200} />;"`)
   })
 
   it('should add literal attribute', () => {
@@ -58,11 +43,7 @@ describe('plugin', () => {
       testPlugin('<div />', {
         attributes: [{ name: 'ref', value: 'ref', literal: true }],
       }),
-    ).toMatchInlineSnapshot(`
-"\\"use strict\\";
-
-<div ref={ref} />;"
-`)
+    ).toMatchInlineSnapshot(`"<div ref={ref} />;"`)
   })
 
   it('should add spread attribute', () => {
@@ -77,11 +58,7 @@ describe('plugin', () => {
           },
         ],
       }),
-    ).toMatchInlineSnapshot(`
-"\\"use strict\\";
-
-<div {...props} foo><span /></div>;"
-`)
+    ).toMatchInlineSnapshot(`"<div {...props} foo><span /></div>;"`)
 
     expect(
       testPlugin('<div><span foo="bar" /></div>', {
@@ -94,11 +71,7 @@ describe('plugin', () => {
           },
         ],
       }),
-    ).toMatchInlineSnapshot(`
-"\\"use strict\\";
-
-<div><span foo=\\"bar\\" {...props} /></div>;"
-`)
+    ).toMatchInlineSnapshot(`"<div><span foo=\\"bar\\" {...props} /></div>;"`)
   })
 
   it('should replace attribute', () => {
@@ -106,10 +79,6 @@ describe('plugin', () => {
       testPlugin('<div disabled />', {
         attributes: [{ name: 'disabled', value: false }],
       }),
-    ).toMatchInlineSnapshot(`
-"\\"use strict\\";
-
-<div disabled={false} />;"
-`)
+    ).toMatchInlineSnapshot(`"<div disabled={false} />;"`)
   })
 })

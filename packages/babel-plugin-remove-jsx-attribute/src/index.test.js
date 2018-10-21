@@ -4,6 +4,7 @@ import plugin from '.'
 const testPlugin = (code, options) => {
   const result = transform(code, {
     plugins: ['@babel/plugin-syntax-jsx', [plugin, options]],
+    configFile: false,
   })
 
   return result.code
@@ -11,19 +12,13 @@ const testPlugin = (code, options) => {
 
 describe('plugin', () => {
   it('should remove attribute', () => {
-    expect(testPlugin('<div foo bar />', { attributes: [{ name: 'foo' }] }))
-      .toMatchInlineSnapshot(`
-"\\"use strict\\";
+    expect(
+      testPlugin('<div foo bar />', { attributes: [{ name: 'foo' }] }),
+    ).toMatchInlineSnapshot(`"<div bar />;"`)
 
-<div bar />;"
-`)
-
-    expect(testPlugin('<div foo bar />', { attributes: [{ name: 'bar' }] }))
-      .toMatchInlineSnapshot(`
-"\\"use strict\\";
-
-<div foo />;"
-`)
+    expect(
+      testPlugin('<div foo bar />', { attributes: [{ name: 'bar' }] }),
+    ).toMatchInlineSnapshot(`"<div foo />;"`)
   })
 
   it('should be possible to target an element', () => {
@@ -32,10 +27,6 @@ describe('plugin', () => {
         elements: ['span'],
         attributes: [{ name: 'foo' }],
       }),
-    ).toMatchInlineSnapshot(`
-"\\"use strict\\";
-
-<div><span foo /></div>;"
-`)
+    ).toMatchInlineSnapshot(`"<div><span foo /></div>;"`)
   })
 })

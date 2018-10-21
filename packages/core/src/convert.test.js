@@ -270,7 +270,12 @@ describe('convert', () => {
       [{ replaceAttrValues: { none: 'black' } }],
       [{ svgo: false }],
       [{ prettier: false }],
-      [{ template: () => 'nothing' }],
+      [
+        {
+          template: ({ template }) =>
+            template.ast`const noop = () => null; export default noop;`,
+        },
+      ],
       [{ titleProp: true }],
     ]
 

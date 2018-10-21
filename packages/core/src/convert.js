@@ -1,7 +1,6 @@
 import svgo from './plugins/svgo'
 import h2x from './plugins/h2x'
 import prettier from './plugins/prettier'
-import transform from './plugins/transform'
 import { expandState } from './util'
 import { loadConfig } from './config'
 
@@ -12,7 +11,6 @@ function applyPlugins(code, config, state) {
   result = String(result).replace('\0', '')
   result = svgo(result, config, state)
   result = h2x(result, config, state)
-  result = transform(result, config, state)
   result = prettier(result, config, state)
   return result
 }

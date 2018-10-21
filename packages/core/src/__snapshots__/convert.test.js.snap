@@ -87,6 +87,7 @@ export default SvgComponent
 exports[`convert config should support options { native: true } 1`] = `
 "import React from 'react'
 import Svg, { G, Path } from 'react-native-svg'
+
 const SvgComponent = props => (
   <Svg width={88} height={88} {...props}>
     <G
@@ -108,6 +109,7 @@ export default SvgComponent
 exports[`convert config should support options { native: true, expandProps: false } 1`] = `
 "import React from 'react'
 import Svg, { G, Path } from 'react-native-svg'
+
 const SvgComponent = () => (
   <Svg width={88} height={88}>
     <G
@@ -129,6 +131,7 @@ export default SvgComponent
 exports[`convert config should support options { native: true, icon: true } 1`] = `
 "import React from 'react'
 import Svg, { G, Path } from 'react-native-svg'
+
 const SvgComponent = props => (
   <Svg width=\\"1em\\" height=\\"1em\\" viewBox=\\"0 0 88 88\\" {...props}>
     <G
@@ -150,6 +153,7 @@ export default SvgComponent
 exports[`convert config should support options { native: true, ref: true } 1`] = `
 "import React from 'react'
 import Svg, { G, Path } from 'react-native-svg'
+
 const SvgComponent = ({ svgRef, ...props }) => (
   <Svg width={88} height={88} ref={svgRef} {...props}>
     <G
@@ -167,17 +171,16 @@ const SvgComponent = ({ svgRef, ...props }) => (
 const ForwardRef = React.forwardRef((props, ref) => (
   <SvgComponent svgRef={ref} {...props} />
 ))
-
 export default ForwardRef
 "
 `;
 
 exports[`convert config should support options { prettier: false } 1`] = `
-"import React from 'react'
+"import React from \\"react\\";
 
 const SvgComponent = props => <svg width={88} height={88} {...props}><g stroke=\\"#063855\\" strokeWidth={2} fill=\\"none\\" fillRule=\\"evenodd\\" strokeLinecap=\\"square\\"><path d=\\"M51 37L37 51M51 51L37 37\\" /></g></svg>;
 
-export default SvgComponent"
+export default SvgComponent;"
 `;
 
 exports[`convert config should support options { ref: true } 1`] = `
@@ -200,7 +203,6 @@ const SvgComponent = ({ svgRef, ...props }) => (
 const ForwardRef = React.forwardRef((props, ref) => (
   <SvgComponent svgRef={ref} {...props} />
 ))
-
 export default ForwardRef
 "
 `;
@@ -230,14 +232,7 @@ exports[`convert config should support options { svgo: false } 1`] = `
 "import React from 'react'
 
 const SvgComponent = props => (
-  <svg
-    width=\\"88px\\"
-    height=\\"88px\\"
-    viewBox=\\"0 0 88 88\\"
-    version={1.1}
-    xmlnsXlink=\\"http://www.w3.org/1999/xlink\\"
-    {...props}
-  >
+  <svg width=\\"88px\\" height=\\"88px\\" viewBox=\\"0 0 88 88\\" {...props}>
     <title>{'Dismiss'}</title>
     <desc>{'Created with Sketch.'}</desc>
     <defs />
@@ -261,8 +256,10 @@ export default SvgComponent
 "
 `;
 
-exports[`convert config should support options { template: { [Function: template] [length]: 0, [name]: 'template' } } 1`] = `
-"nothing
+exports[`convert config should support options { template: { [Function: template] [length]: 1, [name]: 'template' } } 1`] = `
+"const noop = () => null
+
+export default noop
 "
 `;
 
@@ -334,12 +331,7 @@ exports[`convert should convert style attribute 1`] = `
 "import React from 'react'
 
 const SvgComponent = props => (
-  <svg
-    xmlnsXlink=\\"http://www.w3.org/1999/xlink\\"
-    width={48}
-    height={48}
-    {...props}
-  >
+  <svg width={48} height={48} {...props}>
     <g transform=\\"translate(0 -1004.362)\\">
       <g id=\\"a\\" color=\\"#000\\" fill=\\"#a3a3a3\\" strokeWidth={8}>
         <rect

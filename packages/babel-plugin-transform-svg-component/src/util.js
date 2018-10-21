@@ -38,39 +38,24 @@ export const getProps = ({ types: t }, opts) => {
   return t.objectPattern(props)
 }
 
-const getReactNativeSVGComponents = components => {
-  if (!components.size) return ''
-  const componentsStr = [...components]
-    .filter(component => component !== 'Svg')
-    .join(', ')
-  return `, { ${componentsStr} }`
-}
+export const getImport = ({ types: t }, opts) => {
+  const importDeclarations = [
+    t.importDeclaration(
+      [t.importDefaultSpecifier(t.identifier('React'))],
+      t.stringLiteral('react'),
+    ),
+  ]
 
-const getReactNativeSVGWarning = components => {
-  if (!components.size) return ''
-  const componentList = [...components].join(', ')
-  return `// SVGR has dropped some elements not supported by react-native-svg: ${componentList}`
-}
-
-export const getImport = ({ template }, opts, state) => {
-  if (!opts.native) {
-    return template.ast(`import React from 'react'`)
+  if (opts.native) {
+    importDeclarations.push(
+      t.importDeclaration(
+        [t.importDefaultSpecifier(t.identifier('Svg'))],
+        t.stringLiteral('react-native-svg'),
+      ),
+    )
   }
 
-  const {
-    reactNativeSvgReplacedComponents = new Set(),
-    unsupportedComponents = new Set(),
-  } = state.file.metadata
-
-  const components = getReactNativeSVGComponents(
-    reactNativeSvgReplacedComponents,
-  )
-  const warnLog = getReactNativeSVGWarning(unsupportedComponents)
-
-  let result = `import React from 'react';\n`
-  result += `import Svg${components} from 'react-native-svg';\n`
-  result += warnLog
-  return template.ast(result)
+  return importDeclarations
 }
 
 export const getExport = ({ template }, opts) => {
@@ -97,5 +82,7 @@ export const getExport = ({ template }, opts) => {
   }
 
   result += `export default ${exportName}`
-  return template.ast(result)
+  return template.ast(result, {
+    plugins: ['jsx'],
+  })
 }
