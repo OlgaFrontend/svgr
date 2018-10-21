@@ -18,6 +18,7 @@ const plugin = ({ types: t }) => ({
       )
 
       const hasTitle = path.get('children').some(childPath => {
+        if (!childPath.isJSXElement()) return false
         if (childPath.node === titleElement) return false
         if (childPath.node.openingElement.name.name !== 'title') return false
         childPath.replaceWith(titleElement)

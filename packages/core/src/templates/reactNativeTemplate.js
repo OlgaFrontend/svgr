@@ -1,4 +1,4 @@
-import { getProps, getForwardRef, getExportName } from './util'
+import { getProps, getForwardRef, getExport } from './util'
 
 const getComponents = components => {
   if (!components.size) return ''
@@ -16,7 +16,7 @@ const getWarning = components => {
 `
 }
 
-const reactNativeTemplate = (code, config, state) => {
+const reactNativeTemplate = (config, state) => {
   const {
     reactNativeSvgReplacedComponents = new Set(),
     unsupportedComponents = new Set(),
@@ -29,9 +29,9 @@ const reactNativeTemplate = (code, config, state) => {
   let result = `import React from 'react'\n`
   result += `import Svg${components} from 'react-native-svg';\n`
   result += warnLog
-  result += `const ${state.componentName} = ${props} => ${code}\n\n`
+  result += `const ${state.componentName} = ${props} => SVG_ELEMENT\n\n`
   result += getForwardRef(config, state)
-  result += `export default ${getExportName(config, state)}`
+  result += getExport(config, state)
 
   return result
 }

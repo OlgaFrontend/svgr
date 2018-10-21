@@ -17,18 +17,15 @@ export default (code, config, state = {}) => {
 
   const babelTree = hastToBabelAst(hastTree)
 
-  const { code: transformedCode, metadata } = transformFromAstSync(
-    babelTree,
-    code,
-    {
-      presets: [['@svgr/babel-preset', config]],
-      filename: filePath,
-      babelrc: false,
-      configFile: false,
+  return transformFromAstSync(babelTree, code, {
+    caller: {
+      name: 'svgr',
     },
-  )
-
-  Object.assign(state, metadata)
-
-  return transformedCode
+    presets: [['@svgr/babel-preset', { ...config, state }]],
+    filename: filePath,
+    babelrc: false,
+    configFile: false,
+    code: true,
+    ast: false,
+  }).code
 }

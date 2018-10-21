@@ -1,7 +1,7 @@
-export const getProps = ({ types: t }, config) => {
+export const getProps = ({ types: t }, opts) => {
   const props = []
 
-  if (config.ref) {
+  if (opts.ref) {
     props.push(
       t.objectProperty(
         t.identifier('svgRef'),
@@ -12,7 +12,7 @@ export const getProps = ({ types: t }, config) => {
     )
   }
 
-  if (config.titleProp) {
+  if (opts.titleProp) {
     props.push(
       t.objectProperty(
         t.identifier('title'),
@@ -23,7 +23,7 @@ export const getProps = ({ types: t }, config) => {
     )
   }
 
-  if (config.expandProps) {
+  if (opts.expandProps) {
     props.push(t.restElement(t.identifier('props')))
   }
 
@@ -31,7 +31,7 @@ export const getProps = ({ types: t }, config) => {
     return null
   }
 
-  if (props.length === 1 && config.expandProps) {
+  if (props.length === 1 && opts.expandProps) {
     return t.identifier('props')
   }
 
@@ -52,14 +52,15 @@ const getReactNativeSVGWarning = components => {
   return `// SVGR has dropped some elements not supported by react-native-svg: ${componentList}`
 }
 
-export const getImport = ({ template }, config, state) => {
-  if (!config.native) {
+export const getImport = ({ template }, opts, state) => {
+  if (!opts.native) {
     return template.ast(`import React from 'react'`)
   }
+
   const {
     reactNativeSvgReplacedComponents = new Set(),
     unsupportedComponents = new Set(),
-  } = state
+  } = state.file.metadata
 
   const components = getReactNativeSVGComponents(
     reactNativeSvgReplacedComponents,
@@ -72,25 +73,25 @@ export const getImport = ({ template }, config, state) => {
   return template.ast(result)
 }
 
-export const getExport = ({ template }, config, state) => {
+export const getExport = ({ template }, opts) => {
   let result = ''
-  let exportName = state.componentName
+  let exportName = opts.state.componentName
 
-  if (config.ref) {
+  if (opts.ref) {
     exportName = 'ForwardRef'
     result += `const ForwardRef = React.forwardRef((props, ref) => <${
-      state.componentName
+      opts.state.componentName
     } svgRef={ref} {...props} />)\n\n`
   }
 
-  if (state.webpack && state.webpack.previousExport) {
-    result += `export default ${state.webpack.previousExport}\n`
+  if (opts.state.webpack && opts.state.webpack.previousExport) {
+    result += `export default ${opts.state.webpack.previousExport}\n`
     result += `export { ${exportName} as ReactComponent }`
     return template.ast(result)
   }
 
-  if (state.rollup && state.rollup.previousExport) {
-    result += `${state.rollup.previousExport}\n`
+  if (opts.state.rollup && opts.state.rollup.previousExport) {
+    result += `${opts.state.rollup.previousExport}\n`
     result += `export { ${exportName} as ReactComponent }`
     return template.ast(result)
   }

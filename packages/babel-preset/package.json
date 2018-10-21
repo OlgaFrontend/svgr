@@ -25,6 +25,7 @@
     "@svgr/babel-plugin-replace-jsx-attribute-value": "^3.1.0",
     "@svgr/babel-plugin-svg-dynamic-title": "^3.1.0",
     "@svgr/babel-plugin-svg-em-dimensions": "^3.1.0",
-    "@svgr/babel-plugin-transform-react-native-svg": "^3.1.0"
+    "@svgr/babel-plugin-transform-react-native-svg": "^3.1.0",
+    "@svgr/babel-plugin-transform-svg-component": "^3.1.0"
   }
 }

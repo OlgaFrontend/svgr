@@ -9,7 +9,11 @@ function propsToAttributes(props) {
 }
 
 const plugin = (api, opts) => {
-  let toRemoveAttributes = [{ name: 'xmlns' }, { name: 'xmlnsXLink' }]
+  let toRemoveAttributes = [
+    { name: 'xmlns' },
+    { name: 'xmlnsXlink' },
+    { name: 'version' },
+  ]
   let toAddAttributes = []
 
   if (opts.svgProps) {
@@ -76,6 +80,8 @@ const plugin = (api, opts) => {
   if (opts.native) {
     plugins.push('@svgr/babel-plugin-transform-react-native-svg')
   }
+
+  plugins.push(['@svgr/babel-plugin-transform-svg-component', opts])
 
   return { plugins }
 }
