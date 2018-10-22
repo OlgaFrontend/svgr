@@ -6,14 +6,15 @@ import mergeDeep from 'merge-deep'
 const explorer = cosmiconfig('svgo', {
   searchPlaces: [
     'package.json',
-    `.svgorc`,
-    `.svgorc.json`,
-    `.svgorc.yaml`,
-    `.svgorc.yml`,
-    `svgo.config.js`,
+    '.svgorc',
+    '.svgorc.json',
+    '.svgorc.yaml',
+    '.svgorc.yml',
+    'svgo.config.js',
     '.svgo.yml',
   ],
   transform: result => result && result.config,
+  cache: true,
 })
 
 function encodeSVGDatauri(str, type) {
@@ -104,7 +105,18 @@ function getInfo(state) {
     : { input: 'string' }
 }
 
-export default (code, config = {}, state = {}) => {
+export async function async(code, config, state) {
+  if (!config.svgo) return code
+  const filePath = getFilePath(state)
+  const svgoRcConfig = config.runtimeConfig
+    ? await explorer.search(filePath)
+    : {}
+  const svgo = createSvgo(config, svgoRcConfig)
+  const { data } = await svgo.optimize(code, getInfo(state))
+  return data
+}
+
+export default function svgoPlugin(code, config, state) {
   if (!config.svgo) return code
   const filePath = getFilePath(state)
   const svgoRcConfig = config.runtimeConfig ? explorer.searchSync(filePath) : {}

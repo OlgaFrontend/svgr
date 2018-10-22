@@ -25,6 +25,7 @@ export function loadPlugin(moduleName) {
       throw new Error(`Invalid plugin "${moduleName}"`)
     }
     pluginCache[moduleName] = plugin.default || plugin
+    pluginCache[moduleName].async = plugin.async
     return pluginCache[moduleName]
   } catch (error) {
     throw new Error(
