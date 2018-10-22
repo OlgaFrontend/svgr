@@ -14,6 +14,7 @@ describe('plugin', () => {
   it('should add simple attribute', () => {
     expect(
       testPlugin('<div />', {
+        elements: ['div'],
         attributes: [{ name: 'disabled' }],
       }),
     ).toMatchInlineSnapshot(`"<div disabled />;"`)
@@ -22,17 +23,20 @@ describe('plugin', () => {
   it('should add attribute with value', () => {
     expect(
       testPlugin('<div />', {
+        elements: ['div'],
         attributes: [{ name: 'disabled', value: true }],
       }),
     ).toMatchInlineSnapshot(`"<div disabled={true} />;"`)
     expect(
       testPlugin('<div />', {
+        elements: ['div'],
         attributes: [{ name: 'disabled', value: 'true' }],
       }),
     ).toMatchInlineSnapshot(`"<div disabled=\\"true\\" />;"`)
 
     expect(
       testPlugin('<div />', {
+        elements: ['div'],
         attributes: [{ name: 'disabled', value: 200 }],
       }),
     ).toMatchInlineSnapshot(`"<div disabled={200} />;"`)
@@ -41,6 +45,7 @@ describe('plugin', () => {
   it('should add literal attribute', () => {
     expect(
       testPlugin('<div />', {
+        elements: ['div'],
         attributes: [{ name: 'ref', value: 'ref', literal: true }],
       }),
     ).toMatchInlineSnapshot(`"<div ref={ref} />;"`)
@@ -77,6 +82,7 @@ describe('plugin', () => {
   it('should replace attribute', () => {
     expect(
       testPlugin('<div disabled />', {
+        elements: ['div'],
         attributes: [{ name: 'disabled', value: false }],
       }),
     ).toMatchInlineSnapshot(`"<div disabled={false} />;"`)

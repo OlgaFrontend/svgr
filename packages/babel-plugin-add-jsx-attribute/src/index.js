@@ -38,13 +38,7 @@ const addJSXAttribute = ({ types: t }, opts) => {
   return {
     visitor: {
       JSXOpeningElement(path) {
-        if (
-          opts.elements &&
-          !opts.elements.some(element =>
-            path.get('name').isJSXIdentifier({ name: element }),
-          )
-        )
-          return
+        if (!opts.elements.includes(path.node.name.name)) return
 
         opts.attributes.forEach(
           ({

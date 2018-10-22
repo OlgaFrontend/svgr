@@ -1,28 +1,28 @@
-import svgo from './plugins/svgo'
-import h2x from './plugins/h2x'
-import prettier from './plugins/prettier'
-import { expandState } from './util'
+import { expandState } from './state'
 import { loadConfig } from './config'
+import { loadPlugin, resolvePlugins } from './plugins'
 
-function applyPlugins(code, config, state) {
-  state = expandState(state)
-  let result = code
-  // Remove null-byte character (copy/paste from Illustrator)
-  result = String(result).replace('\0', '')
-  result = svgo(result, config, state)
-  result = h2x(result, config, state)
-  result = prettier(result, config, state)
-  return result
+function run(code, config, state) {
+  const expandedState = expandState(state)
+  const plugins = resolvePlugins(config, state)
+  return plugins.reduce(
+    (nextCode, pluginModuleName) => {
+      const plugin = loadPlugin(pluginModuleName)
+      return plugin(nextCode, config, expandedState)
+    },
+    // Remove null-byte character (copy/paste from Illustrator)
+    String(code).replace('\0', ''),
+  )
 }
 
 async function convert(code, config = {}, state = {}) {
   config = await loadConfig(config, state)
-  return applyPlugins(code, config, state)
+  return run(code, config, state)
 }
 
 convert.sync = (code, config = {}, state = {}) => {
   config = loadConfig.sync(config, state)
-  return applyPlugins(code, config, state)
+  return run(code, config, state)
 }
 
 export default convert

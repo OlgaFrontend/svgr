@@ -69,14 +69,8 @@ export const getExport = ({ template }, opts) => {
     } svgRef={ref} {...props} />)\n\n`
   }
 
-  if (opts.state.webpack && opts.state.webpack.previousExport) {
-    result += `export default ${opts.state.webpack.previousExport}\n`
-    result += `export { ${exportName} as ReactComponent }`
-    return template.ast(result)
-  }
-
-  if (opts.state.rollup && opts.state.rollup.previousExport) {
-    result += `${opts.state.rollup.previousExport}\n`
+  if (opts.state.caller && opts.state.caller.previousExport) {
+    result += `${opts.state.caller.previousExport}\n`
     result += `export { ${exportName} as ReactComponent }`
     return template.ast(result)
   }

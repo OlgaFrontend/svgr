@@ -27,5 +27,6 @@ export default (code, config, state = {}) => {
     configFile: false,
     code: true,
     ast: false,
+    inputSourceMap: false,
   }).code
 }

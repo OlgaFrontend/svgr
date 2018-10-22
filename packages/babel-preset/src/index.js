@@ -9,11 +9,7 @@ function propsToAttributes(props) {
 }
 
 const plugin = (api, opts) => {
-  let toRemoveAttributes = [
-    { name: 'xmlns' },
-    { name: 'xmlnsXlink' },
-    { name: 'version' },
-  ]
+  let toRemoveAttributes = ['xmlns', 'xmlnsXlink', 'version']
   let toAddAttributes = []
 
   if (opts.svgProps) {
@@ -43,11 +39,7 @@ const plugin = (api, opts) => {
   }
 
   if (!opts.dimensions) {
-    toRemoveAttributes = [
-      ...toRemoveAttributes,
-      { name: 'width' },
-      { name: 'height' },
-    ]
+    toRemoveAttributes = [...toRemoveAttributes, 'width', 'height']
   }
 
   const plugins = [

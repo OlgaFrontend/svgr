@@ -1,7 +1,7 @@
 import path from 'path'
 import camelcase from 'camelcase'
 
-export function getComponentName(state) {
+function getComponentName(state) {
   if (!state.filePath) return 'SvgComponent'
   const pascalCaseFileName = camelcase(path.parse(state.filePath).name, {
     pascalCase: true,

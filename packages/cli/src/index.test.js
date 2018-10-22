@@ -55,7 +55,7 @@ describe('cli', () => {
     10000,
   )
 
-  it(
+  it.only(
     'should work with stdin',
     async () => {
       const result = await cli('< __fixtures__/simple/file.svg')

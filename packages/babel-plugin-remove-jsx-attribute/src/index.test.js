@@ -11,22 +11,12 @@ const testPlugin = (code, options) => {
 }
 
 describe('plugin', () => {
-  it('should remove attribute', () => {
-    expect(
-      testPlugin('<div foo bar />', { attributes: [{ name: 'foo' }] }),
-    ).toMatchInlineSnapshot(`"<div bar />;"`)
-
-    expect(
-      testPlugin('<div foo bar />', { attributes: [{ name: 'bar' }] }),
-    ).toMatchInlineSnapshot(`"<div foo />;"`)
-  })
-
-  it('should be possible to target an element', () => {
+  it('should remove attributes from an element', () => {
     expect(
       testPlugin('<div foo><span foo /></div>', {
         elements: ['span'],
-        attributes: [{ name: 'foo' }],
+        attributes: ['foo'],
       }),
-    ).toMatchInlineSnapshot(`"<div><span foo /></div>;"`)
+    ).toMatchInlineSnapshot(`"<div foo><span /></div>;"`)
   })
 })
