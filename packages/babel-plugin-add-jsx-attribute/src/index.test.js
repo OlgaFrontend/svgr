@@ -49,6 +49,13 @@ describe('plugin', () => {
         attributes: [{ name: 'ref', value: 'ref', literal: true }],
       }),
     ).toMatchInlineSnapshot(`"<div ref={ref} />;"`)
+
+    expect(
+      testPlugin('<div />', {
+        elements: ['div'],
+        attributes: [{ name: 'ref', value: 'ref ? ref : null', literal: true }],
+      }),
+    ).toMatchInlineSnapshot(`"<div ref={ref ? ref : null} />;"`)
   })
 
   it('should add spread attribute', () => {

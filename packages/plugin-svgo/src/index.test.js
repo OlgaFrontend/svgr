@@ -17,27 +17,35 @@ const baseSvg = `<?xml version="1.0" encoding="UTF-8"?>
 
 describe('svgo', () => {
   it('should optimize svg', () => {
-    const result = svgo(baseSvg, { svgo: true, runtimeConfig: true })
+    const result = svgo(baseSvg, { svgo: true, runtimeConfig: true }, {})
     expect(result).toMatchSnapshot()
   })
 
   it('should support config.svgoConfig', () => {
-    const result = svgo(baseSvg, {
-      svgo: true,
-      runtimeConfig: true,
-      svgoConfig: { svgos: [{ removeDesc: false }] },
-    })
+    const result = svgo(
+      baseSvg,
+      {
+        svgo: true,
+        runtimeConfig: true,
+        svgoConfig: { svgos: [{ removeDesc: false }] },
+      },
+      {},
+    )
 
     expect(result).toMatchSnapshot()
   })
 
   it('should support icon with config.svgoConfig svgos', () => {
-    const result = svgo(baseSvg, {
-      svgo: true,
-      icon: true,
-      runtimeConfig: true,
-      svgoConfig: { svgos: [{ removeDesc: false }] },
-    })
+    const result = svgo(
+      baseSvg,
+      {
+        svgo: true,
+        icon: true,
+        runtimeConfig: true,
+        svgoConfig: { svgos: [{ removeDesc: false }] },
+      },
+      {},
+    )
 
     expect(result).toMatchSnapshot()
   })

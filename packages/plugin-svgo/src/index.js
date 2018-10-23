@@ -105,17 +105,6 @@ function getInfo(state) {
     : { input: 'string' }
 }
 
-export async function async(code, config, state) {
-  if (!config.svgo) return code
-  const filePath = getFilePath(state)
-  const svgoRcConfig = config.runtimeConfig
-    ? await explorer.search(filePath)
-    : {}
-  const svgo = createSvgo(config, svgoRcConfig)
-  const { data } = await svgo.optimize(code, getInfo(state))
-  return data
-}
-
 export default function svgoPlugin(code, config, state) {
   if (!config.svgo) return code
   const filePath = getFilePath(state)

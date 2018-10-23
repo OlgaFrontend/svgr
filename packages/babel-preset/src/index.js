@@ -1,3 +1,12 @@
+import addJSXAttribute from '@svgr/babel-plugin-add-jsx-attribute'
+import removeJSXAttribute from '@svgr/babel-plugin-remove-jsx-attribute'
+import removeJSXEmptyExpression from '@svgr/babel-plugin-remove-jsx-empty-expression'
+import replaceJSXAttributeValue from '@svgr/babel-plugin-replace-jsx-attribute-value'
+import svgDynamicTitle from '@svgr/babel-plugin-svg-dynamic-title'
+import svgEmDimensions from '@svgr/babel-plugin-svg-em-dimensions'
+import transformReactNativeSVG from '@svgr/babel-plugin-transform-react-native-svg'
+import transformSvgComponent from '@svgr/babel-plugin-transform-svg-component'
+
 function propsToAttributes(props) {
   return Object.keys(props).map(name => {
     const value = props[name]
@@ -43,35 +52,32 @@ const plugin = (api, opts) => {
   }
 
   const plugins = [
-    ['@svgr/babel-plugin-transform-svg-component', opts],
+    [transformSvgComponent, opts],
     [
-      '@svgr/babel-plugin-remove-jsx-attribute',
+      removeJSXAttribute,
       { elements: ['svg', 'Svg'], attributes: toRemoveAttributes },
     ],
     [
-      '@svgr/babel-plugin-add-jsx-attribute',
+      addJSXAttribute,
       { elements: ['svg', 'Svg'], attributes: toAddAttributes },
     ],
-    '@svgr/babel-plugin-remove-jsx-empty-expression',
+    removeJSXEmptyExpression,
   ]
 
   if (opts.replaceAttrValues) {
-    plugins.push([
-      '@svgr/babel-plugin-replace-jsx-attribute-value',
-      { values: opts.replaceAttrValues },
-    ])
+    plugins.push([replaceJSXAttributeValue, { values: opts.replaceAttrValues }])
   }
 
   if (opts.icon && opts.dimensions) {
-    plugins.push('@svgr/babel-plugin-svg-em-dimensions')
+    plugins.push(svgEmDimensions)
   }
 
   if (opts.titleProp) {
-    plugins.push('@svgr/babel-plugin-svg-dynamic-title')
+    plugins.push(svgDynamicTitle)
   }
 
   if (opts.native) {
-    plugins.push('@svgr/babel-plugin-transform-react-native-svg')
+    plugins.push(transformReactNativeSVG)
   }
 
   return { plugins }

@@ -3,7 +3,7 @@ const positionMethod = {
   end: 'pushContainer',
 }
 
-const addJSXAttribute = ({ types: t }, opts) => {
+const addJSXAttribute = ({ types: t, template }, opts) => {
   function getAttributeValue({ literal, value }) {
     if (typeof value === 'boolean') {
       return t.jsxExpressionContainer(t.booleanLiteral(value))
@@ -14,7 +14,7 @@ const addJSXAttribute = ({ types: t }, opts) => {
     }
 
     if (typeof value === 'string' && literal) {
-      return t.jsxExpressionContainer(t.identifier(value))
+      return t.jsxExpressionContainer(template.ast(value).expression)
     }
 
     if (typeof value === 'string') {

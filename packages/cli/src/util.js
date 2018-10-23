@@ -7,8 +7,8 @@ import svgrConvert from '@svgr/core'
 export const readFile = util.promisify(fs.readFile)
 export const stat = util.promisify(fs.stat)
 
-export async function convert(code, config, state) {
-  return svgrConvert(code, config, {
+export function convert(code, config, state) {
+  return svgrConvert.sync(code, config, {
     ...state,
     caller: {
       name: '@svgr/cli',

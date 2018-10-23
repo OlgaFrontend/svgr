@@ -2,19 +2,27 @@ import prettier from '.'
 
 describe('prettier', () => {
   it('should prettify code', () => {
-    const result = prettier(`const foo = <div></div>`, {
-      prettier: true,
-      runtimeConfig: true,
-    })
+    const result = prettier(
+      `const foo = <div></div>`,
+      {
+        prettier: true,
+        runtimeConfig: true,
+      },
+      {},
+    )
     expect(result).toBe('const foo = <div />\n')
   })
 
   it('should support config.prettierConfig', () => {
-    const result = prettier(`const foo = <div></div>`, {
-      prettier: true,
-      runtimeConfig: true,
-      prettierConfig: { semi: true },
-    })
+    const result = prettier(
+      `const foo = <div></div>`,
+      {
+        prettier: true,
+        runtimeConfig: true,
+        prettierConfig: { semi: true },
+      },
+      {},
+    )
     expect(result).toBe('const foo = <div />;\n')
   })
 
@@ -35,10 +43,14 @@ describe('prettier', () => {
     const { resolveConfig } = require('prettier')
     /* eslint-enable global-require */
 
-    prettierPlugin(`const foo = <div></div>`, {
-      prettier: true,
-      runtimeConfig: true,
-    })
+    prettierPlugin(
+      `const foo = <div></div>`,
+      {
+        prettier: true,
+        runtimeConfig: true,
+      },
+      {},
+    )
     expect(resolveConfig.sync).toHaveBeenCalledWith(expect.any(String), {
       editorconfig: true,
     })
@@ -52,10 +64,14 @@ describe('prettier', () => {
     const { resolveConfig } = require('prettier')
     /* eslint-enable global-require */
 
-    prettierPlugin(`const foo = <div></div>`, {
-      prettier: true,
-      runtimeConfig: false,
-    })
+    prettierPlugin(
+      `const foo = <div></div>`,
+      {
+        prettier: true,
+        runtimeConfig: false,
+      },
+      {},
+    )
     expect(resolveConfig.sync).not.toHaveBeenCalled()
   })
 })
